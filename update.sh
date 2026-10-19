@@ -42,17 +42,20 @@ if have claude; then
 fi
 
 if have codex; then
-  codex plugin marketplace add DietrichGebert/ponytail >/dev/null 2>&1
-  codex plugin marketplace upgrade ponytail >/dev/null
-  codex plugin add ponytail@ponytail >/dev/null
+  for m in DietrichGebert/ponytail HeidariMilad/lean-ai-setup; do
+    codex plugin marketplace add "$m" >/dev/null 2>&1
+  done
+  codex plugin marketplace upgrade >/dev/null
+  for p in ponytail@ponytail lean-ai-setup@lean-ai-setup; do
+    codex plugin add "$p" >/dev/null
+  done
   codex mcp get codebase-memory-mcp >/dev/null 2>&1 ||
     codex mcp add codebase-memory-mcp -- "$BIN/codebase-memory-mcp"
 fi
 
-python3 - "$DIR/rules.md" <<'PY'
+python3 - <<'PY'
 import json, os, re, sys
 H = os.path.expanduser("~")
-rules = open(sys.argv[1]).read().strip()
 
 def edit(path, fn):
     if not os.path.exists(path):
@@ -68,18 +71,7 @@ cbm = lambda s: re.sub(r"\n*<!-- codebase-memory-mcp:start -->.*?<!-- codebase-m
 for f in ("~/.claude/CLAUDE.md", "~/.codex/AGENTS.md"):
     edit(os.path.expanduser(f), cbm)
 
-# 2. Codex has no plugin hook for our rules, so keep them in a marked block in AGENTS.md.
-block = f"<!-- lean-ai-setup:start -->\n{rules}\n<!-- lean-ai-setup:end -->"
-def put_rules(s):
-    if "<!-- lean-ai-setup:start -->" in s:
-        return re.sub(r"<!-- lean-ai-setup:start -->.*?<!-- lean-ai-setup:end -->", lambda _: block, s, flags=re.S)
-    return s.rstrip() + "\n\n" + block + "\n"
-if os.path.isdir(f"{H}/.codex"):
-    if not os.path.exists(f"{H}/.codex/AGENTS.md"):
-        open(f"{H}/.codex/AGENTS.md", "w").close()
-    edit(f"{H}/.codex/AGENTS.md", put_rules)
-
-# 3. Narrow graphify's skill trigger so it doesn't fire on every code question.
+# 2. Narrow graphify's skill trigger so it doesn't fire on every code question.
 desc = ('description: "Use only when the user types /graphify, or to understand an unfamiliar repo or document '
         'corpus (papers, cross-doc links) before editing it. Not for known repos, small tasks touching <5 files, '
         'or structural code questions (use codebase-memory-mcp). Turns any input (code, docs, papers, images, '
@@ -87,7 +79,7 @@ desc = ('description: "Use only when the user types /graphify, or to understand 
 for d in (".claude/skills", ".codex/skills", ".agents/skills"):
     edit(f"{H}/{d}/graphify/SKILL.md", lambda s: re.sub(r"^description: .*$", lambda _: desc, s, count=1, flags=re.M))
 
-# 4. Remove codebase-memory's session-start reminder and Grep/Glob gate hooks from Claude settings.
+# 3. Remove codebase-memory's session-start reminder and Grep/Glob gate hooks from Claude settings.
 p = f"{H}/.claude/settings.json"
 if os.path.exists(p):
     cfg = json.load(open(p))

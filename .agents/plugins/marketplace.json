@@ -1,0 +1,12 @@
+{
+  "name": "lean-ai-setup",
+  "interface": { "displayName": "Lean AI Setup" },
+  "plugins": [
+    {
+      "name": "lean-ai-setup",
+      "source": { "source": "url", "url": "https://github.com/HeidariMilad/lean-ai-setup.git", "ref": "main" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    }
+  ]
+}

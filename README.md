@@ -19,31 +19,34 @@ It also writes short routing rules ([rules.md](rules.md)) so the agent uses thes
 
 Start a new session. The first session installs everything in the background (log: `~/.lean-ai-setup/update.log`), and the setup is complete from the session after that.
 
-**Terminal (Claude Code and/or Codex, no plugin step needed):**
+**Codex** (CLI, IDE extension, or Codex inside the ChatGPT desktop app):
+
+```bash
+codex plugin marketplace add HeidariMilad/lean-ai-setup
+codex plugin add lean-ai-setup@lean-ai-setup
+```
+
+Then open `codex`, run `/hooks`, and trust the lean-ai-setup and ponytail hooks once. Codex asks for this one-time approval for any plugin that runs hooks.
+
+**Or one terminal command for both:**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/HeidariMilad/lean-ai-setup/main/install.sh | bash
 ```
 
-For Codex, open `codex`, run `/hooks`, and trust ponytail's two hooks once.
+You can also give that command to Codex or Claude Code and ask it to run it.
 
 If you pasted these rules into Claude's profile "Instructions for Claude" or ChatGPT custom instructions before, remove them there. The plugin now supplies them, and keeping both means paying for them twice.
 
 ## Auto-update
 
-Every Claude Code session start checks whether the last update was more than 24 hours ago. If it was, the plugin pulls this repo and runs [update.sh](update.sh) in the background. That updates ponytail, codebase-memory-mcp (downloaded only when a new release exists), graphify, this plugin, and the Codex rules. Nothing slows down session start.
-
-If you only use Codex, there's no session hook, so re-run the install command now and then, or add a daily cron job:
-
-```bash
-(crontab -l 2>/dev/null; echo '0 10 * * * bash ~/.lean-ai-setup/repo/update.sh >> ~/.lean-ai-setup/update.log 2>&1') | crontab -
-```
+Every Claude Code or Codex session start checks whether the last update was more than 24 hours ago. If it was, the plugin pulls this repo and runs [update.sh](update.sh) in the background. That updates ponytail, codebase-memory-mcp (downloaded only when a new release exists), graphify, and this plugin, for both agents. Nothing slows down session start.
 
 Auto-update means code from this repo and the three tools' repos runs on your machine every day. Only install it if you trust them.
 
-## ChatGPT (web/desktop app)
+## ChatGPT
 
-ChatGPT can't run local tools, hooks or MCP servers, so only the behavior rules carry over. Paste this into **Settings → Personalization → Custom instructions**:
+Codex inside the ChatGPT desktop app is covered by the Codex install above. A plain ChatGPT chat (web or app) can't run local tools, hooks or MCP servers, so only the behavior rules carry over. Paste this into **Settings → Personalization → Custom instructions**:
 
 ```
 When writing code: give the smallest complete solution. Use the standard library and the project's existing code first; add no abstractions, options or dependencies nobody asked for. Keep answers short: what changed, then what you skipped or didn't check.
@@ -59,4 +62,4 @@ macOS or Linux with `git`, `curl`, `python3`, and `node` (for ponytail's hooks).
 /plugin uninstall lean-ai-setup@lean-ai-setup
 ```
 
-Then delete `~/.lean-ai-setup` and remove the `lean-ai-setup` block from `~/.codex/AGENTS.md`. This leaves ponytail, codebase-memory-mcp and graphify installed; remove them with their own uninstall commands.
+In Codex: `codex plugin remove lean-ai-setup@lean-ai-setup`. Then delete `~/.lean-ai-setup`. This leaves ponytail, codebase-memory-mcp and graphify installed; remove them with their own uninstall commands.
