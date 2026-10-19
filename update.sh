@@ -45,7 +45,8 @@ if have codex; then
   for m in DietrichGebert/ponytail HeidariMilad/lean-ai-setup; do
     codex plugin marketplace add "$m" >/dev/null 2>&1
   done
-  codex plugin marketplace upgrade >/dev/null
+  codex plugin marketplace upgrade ponytail >/dev/null
+  codex plugin marketplace upgrade lean-ai-setup >/dev/null
   for p in ponytail@ponytail lean-ai-setup@lean-ai-setup; do
     codex plugin add "$p" >/dev/null
   done
