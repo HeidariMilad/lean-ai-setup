@@ -1,5 +1,6 @@
 Default: minimal, stdlib-first solution, no unrequested abstractions (ponytail full).
-For high-fidelity UI work where ponytail would hurt quality, don't apply it; otherwise use it.
+Don't apply ponytail to custom or detail-heavy work: high-fidelity UI, bespoke designs or flows, exact specs, intricate domain logic, or anything the user wants built out in detail. Ponytail cuts that detail, so build it fully there. Otherwise use it.
+Once the user turns ponytail off in a session ("stop ponytail", "normal mode", /ponytail off, or a PONYTAIL MODE OFF notice), it stays off for the rest of that session, including after compaction: don't apply its rules or invoke the ponytail skill until they turn it on again. Every new session starts with ponytail on.
 
 Code tools — use only when they clearly save effort:
 - codebase-memory-mcp: for non-trivial structural questions (call chains, impact analysis, dead code, "who calls X"). Prefer search_graph / trace_path / get_code_snippet over many grep+read rounds. For string literals, configs, non-code files, or edits smaller than a function, use plain grep/read.

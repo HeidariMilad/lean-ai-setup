@@ -1,6 +1,6 @@
 {
   "name": "lean-ai-setup",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Installs and auto-updates ponytail, codebase-memory-mcp and graphify, with lean always-on instructions.",
   "author": { "name": "HeidariMilad", "url": "https://github.com/HeidariMilad" },
   "repository": "https://github.com/HeidariMilad/lean-ai-setup",

@@ -49,7 +49,7 @@ Auto-update means code from this repo and the three tools' repos runs on your ma
 Codex inside the ChatGPT desktop app is covered by the Codex install above. A plain ChatGPT chat (web or app) can't run local tools, hooks or MCP servers, so only the behavior rules carry over. Paste this into **Settings → Personalization → Custom instructions**:
 
 ```
-When writing code: give the smallest complete solution. Use the standard library and the project's existing code first; add no abstractions, options or dependencies nobody asked for. Keep answers short: what changed, then what you skipped or didn't check.
+When writing code: give the smallest complete solution. Use the standard library and the project's existing code first; add no abstractions, options or dependencies nobody asked for. Keep answers short: what changed, then what you skipped or didn't check. For custom or detail-heavy work (high-fidelity UI, bespoke designs, exact specs), skip the minimal approach and build it out in full.
 ```
 
 ## Requirements
